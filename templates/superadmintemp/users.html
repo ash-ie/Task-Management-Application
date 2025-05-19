@@ -1,0 +1,67 @@
+{% extends 'superadmintemp/index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title fw-bold mb-0">Users</h5>
+            <a href="{% url 'add_users' %}" class="btn btn-sm btn-primary">Add User</a>
+        </div>
+        <hr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.username}}</td>
+                <td>{{i.name}}</td>
+                <td>{{i.email}}</td>
+                <td>
+                    {% if i.role == 2 %}
+                    Admin
+                    {% elif i.role == 3 %}
+                    User
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">Delete</button>
+
+                    <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ i.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ i.id }}">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete user <strong>{{ i.username }}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a href="{% url 'delete_user' i.id %}" class="btn btn-danger">Yes, Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No data available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

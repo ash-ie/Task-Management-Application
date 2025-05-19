@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
   </head>
   <body>
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column p-3 text-dark shadow" style="width: 200px;">
@@ -16,10 +26,16 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-          <a href="#" class="nav-link active">Dashboard</a>
+            <a href="{% url 'superadmin_home' %}" class="nav-link 
+            {% if request.resolver_match.url_name == 'superadmin_home' %}active{% else %}text-dark{% endif %}">
+                Dashboard
+            </a>
         </li>
         <li>
-          <a href="#" class="nav-link text-dark">Users</a>
+            <a href="{% url 'view_users' %}" class="nav-link 
+            {% if request.resolver_match.url_name == 'add_users' %}active{% else %}text-dark{% endif %}">
+                Users
+            </a>
         </li>
         <li>
           <a href="#" class="nav-link text-dark">Reports</a>
@@ -46,8 +62,9 @@
     <!-- Main Content -->
     <main class="content pt-5">
       <div class="container-fluid mt-3">
-        <h2>Dashboard</h2>
         <div class="row">
+            {% block content %}
+            {% endblock %}
           <!-- <div class="col-md-3 mb-4">
             <div class="card text-white bg-primary">
               <div class="card-body">

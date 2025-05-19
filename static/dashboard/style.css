@@ -7,7 +7,7 @@ body {
     top: 0;
     left: 0;
     z-index: 100;
-    background-color: white
+    background-color: white;
     padding-top: 60px;
 }
 .sidebar .nav-link {
