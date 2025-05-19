@@ -1,8 +1,9 @@
 from django.urls import path
 
-from user_app import views
+from superadmin_app import views
 
 
 urlpatterns = [
-    path('',views.index,name='index'),
+    path('',views.signin,name='signin'),
+    path('superadmin_home',views.superadmin_index,name='superadmin_home'),
 ]
