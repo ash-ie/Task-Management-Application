@@ -1,22 +1,25 @@
-/* style.css */
-
-/* Make sure the page itself fills the viewport */
 html, body {
   height: 100%;
   margin: 0;
 }
 
-/* Flexbox container that centers its children */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;      /* full viewport height */
-  background: #f8f9fa;    /* optional light gray bg (matches Bootstrap .bg-light) */
+  min-height: 100vh;   
+  background: #f8f9fa;    
 }
 
-/* Optional: limit the card’s max width on large screens */
 .card {
   max-width: 400px;
   width: 100%;
+}
+
+.fade-message {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+.fade-message.fade-out {
+  opacity: 0;
 }

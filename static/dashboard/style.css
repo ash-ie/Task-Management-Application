@@ -1,0 +1,29 @@
+body {
+    font-size: 0.9rem;
+}
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: white
+    padding-top: 60px;
+}
+.sidebar .nav-link {
+    color: #fff;
+}
+.sidebar .nav-link.active {
+    background-color: #495057;
+}
+.content {
+    margin-left: 200px;
+    padding: 2rem;
+}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 200px;
+    width: calc(100% - 200px);
+    z-index: 101;
+}
