@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from superadmin_app.forms import UserForm
-from superadmin_app.models import User
+from superadmin_app.decorators import super_admin_required
+from superadmin_app.forms import TaskForm, UserForm
+from superadmin_app.models import Task, User
 # Create your views here.
 def signin(request):
     if request.method == 'POST':
@@ -23,13 +24,15 @@ def signin(request):
             messages.error(request, f"An error occurred: {str(e)}")
     return render(request, 'login.html')
 
+def signout(request):
+    logout(request)
+    return redirect('signin')
+
+@super_admin_required
 def superadmin_index(request):
     return render(request,'superadmintemp/index.html')
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import UserForm
-
+@super_admin_required
 def add_users(request):
     try:
         if request.method == 'POST':
@@ -48,6 +51,7 @@ def add_users(request):
         form = UserForm() 
         return render(request, 'superadmintemp/user_form.html', {'form': form})
 
+@super_admin_required
 def view_users(request):
     try:
         data = User.objects.exclude(role=1)
@@ -56,6 +60,7 @@ def view_users(request):
         messages.error(request, f"An error occurred while fetching users: {str(e)}")
         return render(request, 'superadmintemp/users.html', {'data': []})
 
+@super_admin_required
 def delete_user(request, user_id):
     try:
         user = get_object_or_404(User, id=user_id)
@@ -64,3 +69,51 @@ def delete_user(request, user_id):
     except Exception as e:
         messages.error(request, f"An error occurred while deleting the user: {e}")
     return redirect('view_users') 
+
+@super_admin_required
+def add_task(request):
+    try:
+        if request.method == 'POST':
+            form = TaskForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('view_tasks')
+        else:
+            form = TaskForm()
+        return render(request, 'superadmintemp/task_form.html', {'form': form})
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+        form = TaskForm() 
+    return render(request, 'superadmintemp/task_form.html', {'form': form})
+
+@super_admin_required
+def view_task(request):
+    try:
+        data = Task.objects.all()
+        return render(request, 'superadmintemp/tasks.html', {'data': data})
+    except Exception as e:
+        messages.error(request, f"An error occurred while fetching tasks: {str(e)}")
+        return render(request, 'superadmintemp/tasks.html', {'data': []})
+
+@super_admin_required 
+def edit_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Task updated successfully.")
+            return redirect('view_tasks')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'superadmintemp/task_edit.html', {'form': form})
+
+@super_admin_required 
+def delete_task(request, task_id):
+    try:
+        task = get_object_or_404(Task, id=task_id)
+        task.delete()
+        messages.success(request, "Task deleted successfully.")
+    except Exception as e:
+        messages.error(request, f"An error occurred while deleting the user: {e}")
+    return redirect('view_tasks') 

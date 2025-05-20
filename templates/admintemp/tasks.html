@@ -1,0 +1,82 @@
+{% extends 'admintemp/index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title fw-bold mb-0">Tasks</h5>
+            <a href="{% url 'add_task_admin' %}" class="btn btn-sm btn-primary">Add Tasks</a>
+        </div>
+        <hr>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Asignee</th>
+                <th scope="col">Due date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Completion Report</th>
+                <th scope="col">Worked Hours</th>
+                <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.title}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.assigned_to}}</td>
+                <td>{{i.due_date}}</td>
+                <td>
+                    {% if i.status == "Pending" %}
+                    <span class="btn btn-warning btn-sm">Pending</span>
+                    {% elif i.status == "In Progress" %}
+                    <span class="btn btn-primary btn-sm">In Progress</span>
+                    {% elif i.status == "Completed" %}
+                    <span class="btn btn-success btn-sm">Completed</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if i.worked_hours %}
+                    {{i.completion_report}}
+                    {% else %}
+                    --
+                    {% endif %}
+                </td>
+                <td>{{ i.worked_hours|default_if_none:"0" }}</td>
+                <td><a href="{% url 'edit_task_admin' i.id %}" class="btn  btn-sm btn-success">Edit</a></td>
+                <td>
+                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">Delete</button>
+
+                    <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ i.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="deleteModalLabel{{ i.id }}">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete task <strong>{{ i.title }}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a href="{% url 'delete_task_admin' i.id %}" class="btn btn-danger">Yes, Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center">No data available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

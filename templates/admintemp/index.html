@@ -16,21 +16,15 @@
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{% url 'superadmin_home' %}" class="nav-link 
-            {% if request.resolver_match.url_name == 'superadmin_home' %}active{% else %}text-dark{% endif %}">
+            <a href="{% url 'admin_home' %}" class="nav-link 
+            {% if request.resolver_match.url_name == 'admin_home' %}active{% else %}text-dark{% endif %}">
                 Dashboard
             </a>
         </li>
         <li>
-            <a href="{% url 'view_users' %}" class="nav-link 
-            {% if request.resolver_match.url_name == 'view_users' %}active{% else %}text-dark{% endif %}">
-                Users
-            </a>
-        </li>
-        <li>
-          <a href="{% url 'view_tasks' %}" class="nav-link 
-          {% if request.resolver_match.url_name == 'view_tasks' %}active{% else %}text-dark{% endif %}">
-            Tasks
+          <a href="{% url 'view_task_admin' %}" class="nav-link 
+          {% if request.resolver_match.url_name == 'view_task_admin' %}active{% else %}text-dark{% endif %}">
+            Task
           </a>
         </li>
       </ul>
@@ -68,7 +62,7 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Welcome {{request.user}}</h5>
-                <p class="card-text">Youre in superadmin dashboard</p>
+                <p class="card-text">Youre in admin dashboard</p>
               </div>
             </div>
           </div>
